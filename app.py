@@ -20,6 +20,8 @@ def setup_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920x1080")
+    chrome_options.page_load_strategy = 'eager'  # 'none' is also an option
+
     
     # Use the service object to manage chromedriver
     service = Service(ChromeDriverManager().install())
