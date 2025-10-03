@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import expected_conditions as EC
+import traceback
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -105,8 +106,13 @@ def scrape():
         return jsonify(result)
 
     except Exception as e:
+        error_traceback = traceback.format_exc()
+        # Print the detailed traceback to your Render logs
+        print("AN ERROR OCCURRED:")
+        print(error_traceback)
         # Return a proper error message if something goes wrong
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"An error occurred: {str(e)}",
+                        "traceback": error_traceback}), 500
 
     finally:
         # IMPORTANT: Always quit the driver to free up resources
@@ -117,3 +123,4 @@ if __name__ == "__main__":
     # Use Gunicorn as the server in production (Render will do this)
     # The following is for local testing only
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+
