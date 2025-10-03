@@ -2,6 +2,8 @@ import os
 from flask import Flask, request, jsonify
 import pandas as pd
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
@@ -20,7 +22,8 @@ def setup_driver():
     chrome_options.add_argument("--window-size=1920x1080")
     
     # Use the service object to manage chromedriver
-    service = webdriver.chrome.service.Service()
+    service = Service(ChromeDriverManager().install())
+    # service = webdriver.chrome.service.Service()
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
