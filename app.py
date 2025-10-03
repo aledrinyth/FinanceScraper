@@ -114,4 +114,5 @@ def scrape():
 if __name__ == "__main__":
     # Use Gunicorn as the server in production (Render will do this)
     # The following is for local testing only
+    scrape()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
