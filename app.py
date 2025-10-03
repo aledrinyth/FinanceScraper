@@ -77,7 +77,8 @@ def scrape():
     if not data or 'ticker' not in data:
         return jsonify({"error": "Ticker is required in the request body"}), 400
     
-    ticker = data['ticker']
+    ticker = "AAPL"
+    # ticker = data['ticker']
     driver = None # Initialize driver to None
 
     try:
@@ -96,6 +97,8 @@ def scrape():
             "balanceSheet": balance_sheet,
             "cashFlow": cash_flow
         }
+
+        print(result)
         
         return jsonify(result)
 

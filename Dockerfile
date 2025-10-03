@@ -20,4 +20,4 @@ RUN pip install -r requirements.txt
 
 RUN google-chrome --version
 
-CMD ["python", "run.py"]
+CMD ["python", "app.py"]
