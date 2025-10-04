@@ -35,13 +35,13 @@ def scrape_financial_table(driver, url):
     driver.get(url)
     
     # Wait for and click the "Expand All" button
-    expand_button = WebDriverWait(driver, 20).until(
+    expand_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.CSS_SELECTOR, "button.link2-btn[data-ylk*='expand']"))
     )
     expand_button.click()
 
     # Wait for the table container to be present
-    table_container = WebDriverWait(driver, 20).until(
+    table_container = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "div.tableContainer"))
     )
 
