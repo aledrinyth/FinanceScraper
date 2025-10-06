@@ -75,12 +75,19 @@ def health_check():
 # This is our main API endpoint
 @app.route('/scrape', methods=['POST'])
 def scrape():
-    # Get the ticker from the incoming JSON request body
-    data = request.get_json()
-    if not data or 'ticker' not in data:
+    # Parse and validate input
+    data = request.get_json(silent=True) or {}
+    raw_ticker = str(data.get('ticker', '')).strip()
+    if not raw_ticker:
         return jsonify({"error": "Ticker is required in the request body"}), 400
-    
-    ticker = data['ticker']
+
+    # Basic sanitization: allow common Yahoo Finance ticker chars
+    # (letters, digits, dot, dash, equals, caret)
+    if not re.fullmatch(r"[A-Za-z0-9.\-=^]+", raw_ticker):
+        return jsonify({"error": "Ticker contains invalid characters"}), 400
+
+    # Yahoo Finance tickers are case-insensitive; normalize to upper
+    ticker = raw_ticker.upper()
     driver = None # Initialize driver to None
 
     try:
