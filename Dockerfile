@@ -49,7 +49,7 @@ RUN set -eux; \
     echo "Exact version not found; falling back to latest patch for major ${MAJOR}"; \
     # Pull the 'latest-patch-versions-per-build-with-downloads' JSON and pick linux64 chromedriver for our MAJOR.*
     curl -fsSL -o /tmp/latest.json https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build-with-downloads.json; \
-    python3 - <<'PY' > /tmp/url.txt
+    python3 - <<PY > /tmp/url.txt
 import json, os, re, sys
 data = json.load(open('/tmp/latest.json'))
 major = os.environ['MAJOR']
