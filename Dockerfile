@@ -51,21 +51,21 @@ RUN set -eux; \
     curl -fsSL -o /tmp/latest.json https://googlechromelabs.github.io/chrome-for-testing/latest-patch-versions-per-build-with-downloads.json; \
     python3 - <<'PY' > /tmp/url.txt
 import json, os, re, sys
-   data = json.load(open('/tmp/latest.json'))
-   major = os.environ['MAJOR']
-   found = False
-   for build, meta in data['builds'].items():
-       if build.split('.')[0] == major:
-           if 'chromedriver' in meta.get('downloads', {}):
-               for d in meta['downloads']['chromedriver']:
-                   if d['platform'] == 'linux64':
-                       print(d['url'])
-                       found = True
-                       break
-           if found:
-               break
-   if not found:
-       raise SystemExit("No linux64 chromedriver URL found for major " + major)
+data = json.load(open('/tmp/latest.json'))
+major = os.environ['MAJOR']
+found = False
+for build, meta in data['builds'].items():
+    if build.split('.')[0] == major:
+        if 'chromedriver' in meta.get('downloads', {}):
+            for d in meta['downloads']['chromedriver']:
+                if d['platform'] == 'linux64':
+                    print(d['url'])
+                    found = True
+                    break
+        if found:
+            break
+if not found:
+    raise SystemExit("No linux64 chromedriver URL found for major " + major)
 PY; \
     curl -fsSL -o /tmp/chromedriver.zip "$(cat /tmp/url.txt)"; \
   fi; \
