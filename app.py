@@ -22,12 +22,11 @@ def setup_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920x1080")
-    chrome_options.page_load_strategy = 'eager'  # 'none' is also an option
+    chrome_options.page_load_strategy = 'eager'
 
-    
-    # Use the service object to manage chromedriver
-    service = Service(ChromeDriverManager().install())
-    # service = webdriver.chrome.service.Service()
+    # Initialize the service object. Since chromedriver is in the PATH,
+    # Selenium can find it automatically.
+    service = Service()
     driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
@@ -130,4 +129,3 @@ if __name__ == "__main__":
     # Use Gunicorn as the server in production (Render will do this)
     # The following is for local testing only
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
-

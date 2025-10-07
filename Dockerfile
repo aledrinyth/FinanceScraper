@@ -4,10 +4,20 @@ WORKDIR /app
 
 RUN mkdir __logger
 
-# install google chrome
+# install google chrome and dependencies
+RUN apt-get update && apt-get install -y wget unzip
+
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /etc/apt/keyrings/google-chrome.gpg
 RUN echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 RUN apt-get update && apt-get install -y google-chrome-stable
+
+# install chromedriver
+RUN CHROME_VERSION=$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1) && \
+    CHROMEDRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) && \
+    wget -q https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/local/bin/ && \
+    rm chromedriver_linux64.zip
 
 # set display port to avoid crash
 ENV DISPLAY=:99
@@ -19,5 +29,6 @@ COPY . /app
 RUN pip install -r requirements.txt
 
 RUN google-chrome --version
+RUN chromedriver --version
 
 CMD ["python", "app.py"]
